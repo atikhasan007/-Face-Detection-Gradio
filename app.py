@@ -93,7 +93,7 @@ with gr.Blocks() as demo:
         fn=detect_faces_from_webcam,
         inputs=[webcam_input, scale_factor_slider, min_neighbors_slider],
         outputs=output_image,
-        stream_every=0.1, # Process a frame every 0.1 seconds (10 FPS)
+       # stream_every=0.1, # Process a frame every 0.1 seconds (10 FPS)
         time_limit=300 # Limit stream to 5 minutes to manage resource usage
     )
 
