@@ -1,6 +1,4 @@
-gradio==4.44.0
-huggingface_hub==0.24.5
-opencv-python
-pillow
+gradio==4.44.1
+opencv-python-headless
 numpy
-
+pillow
