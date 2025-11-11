@@ -2,9 +2,10 @@ import gradio as gr
 import cv2
 import numpy as np
 from PIL import Image
-#md atik hasan
-# Load the Haarcascade classifier ---
-# Make sure 'haarcascade_frontalface_default.xml' is in the same directory as this app.py
+
+# md atik hasan
+
+# --- Load the Haarcascade classifier ---
 HAARCASCADE_PATH = "haarcascade_frontalface_default.xml"
 try:
     face_cascade = cv2.CascadeClassifier(HAARCASCADE_PATH)
@@ -13,23 +14,20 @@ try:
     print("Haarcascade classifier loaded successfully!")
 except Exception as e:
     print(f"Error loading Haarcascade classifier: {e}")
-    # You might want to add a fallback or an error message in the UI if it fails.
-    face_cascade = None # Set to None so the detection function can handle it.
+    face_cascade = None  # Set to None so detection function can handle it.
 
 
-# Face Detection Function ---
+# --- Face Detection Function ---
 def detect_faces_from_webcam(image: Image.Image, scale_factor: float = 1.1, min_neighbors: int = 5):
     if image is None:
-        return None # Return None if no image is provided (e.g., webcam not active yet)
+        return None  # Return None if no image provided
     if face_cascade is None:
-        # If cascade failed to load, return the original image with an error message
-        # (This is a simple way to handle, could be more sophisticated)
         print("Haarcascade classifier not loaded. Cannot perform detection.")
-        return image # Or draw text on image: cv2.putText(np.array(image), "Error: Classifier not loaded", ...)
+        return image
 
-    # Convert PIL Image to OpenCV format (BGR)
+    # Convert PIL Image to OpenCV format
     image_np = np.array(image)
-    image_bgr = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR) # OpenCV works in BGR by default
+    image_bgr = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
     gray_image = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
 
     # Detect faces
@@ -37,65 +35,66 @@ def detect_faces_from_webcam(image: Image.Image, scale_factor: float = 1.1, min_
         gray_image,
         scaleFactor=scale_factor,
         minNeighbors=min_neighbors,
-        minSize=(30, 30) # Minimum object size to be detected. Objects smaller than this are ignored.
+        minSize=(30, 30)
     )
 
-    # Draw rectangles around the faces on the BGR image
+    # Draw rectangles around faces
     for (x, y, w, h) in faces:
-        cv2.rectangle(image_bgr, (x, y), (x+w, y+h), (0, 255, 0), 2) # Green rectangle
+        cv2.rectangle(image_bgr, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    # Convert back to PIL Image (RGB) for Gradio display
+    # Convert back to PIL Image
     annotated_image_pil = Image.fromarray(cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB))
     return annotated_image_pil
 
-# --- 3. Gradio Interface ---
+
+# --- Gradio Interface ---
 with gr.Blocks() as demo:
     gr.Markdown(
         """
-        # Real-time Haarcascade Face Detection
-        Stream your front camera to detect faces using the OpenCV Haarcascade classifier.
+        # 🎥 Real-time Haarcascade Face Detection  
+        Stream your webcam to detect faces in real time using OpenCV Haarcascade.
         """
     )
+
     with gr.Row():
         with gr.Column():
-            # Webcam input for continuous streaming
+            # Webcam input
             webcam_input = gr.Image(
                 type="pil",
                 label="Your Webcam Feed",
-                sources=["webcam"], # Enable webcam as input source
-                streaming=True,     # Enable real-time streaming
-                # mirror_webcam=True # Optionally mirror the webcam feed
+                sources=["webcam"],
+                streaming=True
             )
-            # Sliders to adjust Haarcascade parameters
+
+            # Sliders for fine-tuning detection
             scale_factor_slider = gr.Slider(
                 minimum=1.01,
                 maximum=1.5,
                 value=1.1,
                 step=0.01,
-                label="Scale Factor (detection sensitivity)"
+                label="Scale Factor (Detection Sensitivity)"
             )
+
             min_neighbors_slider = gr.Slider(
                 minimum=0,
                 maximum=10,
                 value=5,
                 step=1,
-                label="Min Neighbors (detection quality)"
+                label="Min Neighbors (Detection Quality)"
             )
 
         with gr.Column():
             output_image = gr.Image(
                 type="pil",
-                label="Detected Faces (Real-time)"
+                label="Detected Faces (Live Output)"
             )
 
-    # Stream the input image to the detection function
+    # Stream webcam frames to detection function
     webcam_input.stream(
         fn=detect_faces_from_webcam,
         inputs=[webcam_input, scale_factor_slider, min_neighbors_slider],
-        outputs=output_image,
-       # stream_every=0.1, # Process a frame every 0.1 seconds (10 FPS)
-        time_limit=300 # Limit stream to 5 minutes to manage resource usage
+        outputs=output_image
     )
 
-# demo.launch()
-demo.launch(share = True)
+# Launch Gradio app
+demo.launch(share=True)
