@@ -15,12 +15,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # full commit history
+          fetch-depth: 0
 
       - name: Configure Git
         run: |
-          git config --global user.email "arafmustavi@gmail.com"
-          git config --global user.name "arafmustavi"
+          git config --global user.email "atikhasan007@gmail.com"
+          git config --global user.name "Atik513"
 
       - name: Push to Hugging Face Space
         run: |
