@@ -1,3 +1,15 @@
+
+---
+title: Face Detection App
+emoji: 👁️
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: "4.0.0"
+app_file: app.py
+pinned: false
+---
+
 # 🧠 Real-time Face Detection using OpenCV & Gradio
 
 This project is a **real-time face detection web app** built with **Gradio** and **OpenCV's Haarcascade classifier**.  
