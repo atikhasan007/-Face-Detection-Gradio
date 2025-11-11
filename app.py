@@ -1,4 +1,3 @@
-
 import gradio as gr
 import cv2
 import numpy as np
@@ -6,7 +5,7 @@ from PIL import Image
 
 # Load the Haarcascade classifier ---
 # Make sure 'haarcascade_frontalface_default.xml' is in the same directory as this app.py
-HAARCASCADE_PATH = "/home/atik/Desktop/model_deployment/haar_cascade.xml"
+HAARCASCADE_PATH = "haarcascade_frontalface_default.xml"
 try:
     face_cascade = cv2.CascadeClassifier(HAARCASCADE_PATH)
     if face_cascade.empty():
@@ -100,4 +99,3 @@ with gr.Blocks() as demo:
 
 # demo.launch()
 demo.launch(share = True)
-
