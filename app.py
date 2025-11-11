@@ -2,7 +2,7 @@ import gradio as gr
 import cv2
 import numpy as np
 from PIL import Image
-
+#md atik hasan
 # Load the Haarcascade classifier ---
 # Make sure 'haarcascade_frontalface_default.xml' is in the same directory as this app.py
 HAARCASCADE_PATH = "haarcascade_frontalface_default.xml"
