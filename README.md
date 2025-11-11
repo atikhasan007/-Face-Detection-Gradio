@@ -1,14 +1,15 @@
 
 ---
-title: Face Detection App
-emoji: 👁️
-colorFrom: blue
-colorTo: indigo
+title: Haarcascade Face Detection
+emoji: 😎
+colorFrom: indigo
+colorTo: pink
 sdk: gradio
-sdk_version: "4.44.0"
+sdk_version: "4.44.1"
 app_file: app.py
 pinned: false
 ---
+
 
 
 
