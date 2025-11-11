@@ -3,8 +3,6 @@ import cv2
 import numpy as np
 from PIL import Image
 
-# md atik hasan
-
 # --- Load the Haarcascade classifier ---
 HAARCASCADE_PATH = "haarcascade_frontalface_default.xml"
 try:
@@ -14,23 +12,21 @@ try:
     print("Haarcascade classifier loaded successfully!")
 except Exception as e:
     print(f"Error loading Haarcascade classifier: {e}")
-    face_cascade = None  # Set to None so detection function can handle it.
+    face_cascade = None
 
 
 # --- Face Detection Function ---
 def detect_faces_from_webcam(image: Image.Image, scale_factor: float = 1.1, min_neighbors: int = 5):
     if image is None:
-        return None  # Return None if no image provided
+        return None
     if face_cascade is None:
-        print("Haarcascade classifier not loaded. Cannot perform detection.")
+        print("Haarcascade classifier not loaded.")
         return image
 
-    # Convert PIL Image to OpenCV format
     image_np = np.array(image)
     image_bgr = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
     gray_image = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
 
-    # Detect faces
     faces = face_cascade.detectMultiScale(
         gray_image,
         scaleFactor=scale_factor,
@@ -38,11 +34,9 @@ def detect_faces_from_webcam(image: Image.Image, scale_factor: float = 1.1, min_
         minSize=(30, 30)
     )
 
-    # Draw rectangles around faces
     for (x, y, w, h) in faces:
         cv2.rectangle(image_bgr, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    # Convert back to PIL Image
     annotated_image_pil = Image.fromarray(cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB))
     return annotated_image_pil
 
@@ -58,7 +52,6 @@ with gr.Blocks() as demo:
 
     with gr.Row():
         with gr.Column():
-            # Webcam input
             webcam_input = gr.Image(
                 type="pil",
                 label="Your Webcam Feed",
@@ -66,7 +59,6 @@ with gr.Blocks() as demo:
                 streaming=True
             )
 
-            # Sliders for fine-tuning detection
             scale_factor_slider = gr.Slider(
                 minimum=1.01,
                 maximum=1.5,
@@ -84,17 +76,12 @@ with gr.Blocks() as demo:
             )
 
         with gr.Column():
-            output_image = gr.Image(
-                type="pil",
-                label="Detected Faces (Live Output)"
-            )
+            output_image = gr.Image(type="pil", label="Detected Faces (Live Output)")
 
-    # Stream webcam frames to detection function
     webcam_input.stream(
         fn=detect_faces_from_webcam,
         inputs=[webcam_input, scale_factor_slider, min_neighbors_slider],
         outputs=output_image
     )
 
-# Launch Gradio app
-demo.launch(share=True)
+demo.launch()
