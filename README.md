@@ -1,4 +1,3 @@
-
 ---
 title: Haarcascade Face Detection
 emoji: 😎
