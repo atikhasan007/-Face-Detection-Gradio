@@ -1,13 +1,16 @@
 ---
-title: Haarcascade Face Detection
-emoji: 😎
+title:  CI/CD demo
+emoji: 🌖
 colorFrom: indigo
-colorTo: pink
+colorTo: red
 sdk: gradio
-sdk_version: "4.43.0"
+sdk_version: "5.35.0"
 app_file: app.py
-pinned: false
+pinned: true
+license: apache-2.0
+short_description: github push to hugging face deployment
 ---
+
 
 
 
