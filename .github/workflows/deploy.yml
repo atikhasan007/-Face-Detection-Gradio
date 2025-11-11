@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # fetch full history (needed for push)
+          fetch-depth: 0  # full commit history
 
       - name: Configure Git
         run: |
@@ -24,5 +24,6 @@ jobs:
 
       - name: Push to Hugging Face Space
         run: |
+          git remote remove hf || true
           git remote add hf https://Atik513:${HF_TOKEN}@huggingface.co/spaces/Atik513/first_space
           git push hf main --force
